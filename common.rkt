@@ -1,10 +1,15 @@
 #lang racket
 
 (define (open-day n)
-  (file->list (string-append "day_" (~v n) ".in")))
+  (let* [(day-str (~v n))
+         (day-filename (string-append "day_" day-str ".in"))]
+    (if (file-exists? day-filename)
+        (file->list day-filename)
+        (begin (system (string-append "raco aoc -d " day-str " > " day-filename))
+               (open-day n)))))
 
 (define (unpack-lists rest-id)
-  "Returns a list of cars and a list of cdrs. If any list is empty, return nil."
+  "Returns a cons of cars and a list of cdrs. If any list is empty, return nil."
   (define (aux lsts cars cdrs)
     (cond ((empty? lsts) (cons (reverse cars) (reverse cdrs)))
           ((empty? (car lsts)) '())
