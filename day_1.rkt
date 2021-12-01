@@ -4,11 +4,7 @@
 (define input (open-day 1))
 
 (define (solver1 input)
-  (define (aux lst acc)
-    (cond ((empty? (cdr lst)) acc)
-          ((< (car lst) (cadr lst)) (aux (cdr lst) (+ acc 1)))
-          (#t (aux (cdr lst) acc))))
-  (aux input 0))
+  (count identity (mapb < input (cdr input))))
 
 (solver1 input)
 
