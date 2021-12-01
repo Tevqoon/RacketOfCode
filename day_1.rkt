@@ -7,10 +7,10 @@
 (define (solver1 input)
   (count identity (mapcar < input (cdr input))))
 
-(solver1 input)
+(submit 1 (solver1 input))
 
 (define (solver2 input)
   (solver1 (mapcar + input (cdr input) (cddr input))))
 
-(solver2 input)
+(submit 2 (solver2 input))
  

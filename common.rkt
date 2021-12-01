@@ -8,26 +8,16 @@
       (system (format "raco aoc -d ~a > ~a" n day-filename)))
     (file->list day-filename)))
 
-(define (unpack-lists lists)
-  "Takes a list of lists and returns a list of their cars and a list of their cdrs.
-   If any list is empty, return nil."
-  (define (aux lists cars cdrs)
-    (cond [(empty? lists) (cons (reverse cars) (reverse cdrs))]
-          [(empty? (car lists)) '()]
-          [#t (aux (cdr lists)
-                   (cons (caar lists) cars)
-                   (cons (cdar lists) cdrs))]))
-  (aux lists '() '()))
+(define (submit n val [submit? #f])
+  (if submit?
+      (system (format "raco aoc -a ~a ~a" n val))
+      val))
 
-(define (mapcar proc . lists)
-  "Map proc over lists, returning when any one of them runs out."
-  (define (aux lists acc)
-    (let [(unpacked (unpack-lists lists))]
-      (if (empty? unpacked)
-          (reverse acc)
-          (aux (cdr unpacked)
-               (cons (apply proc (car unpacked))
-                     acc)))))
-  (aux lists '()))
+(define (mapcar f . xss)
+  (define (aux acc . xss)
+    (if (ormap empty? xss)
+        (reverse acc)
+        (apply aux (cons (apply f (map car xss)) acc) (map cdr xss))))
+  (apply aux '() xss))
 
 (provide (all-defined-out))
