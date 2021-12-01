@@ -3,18 +3,18 @@
 (define (open-day n)
   (let* [(day-str (~v n))
          (day-filename (string-append "day_" day-str ".in"))]
-    (if (file-exists? day-filename)
-        (file->list day-filename)
-        (begin (system (string-append "raco aoc -d " day-str " > " day-filename))
-               (open-day n)))))
+    (unless (file-exists? day-filename)
+      (system (string-append "raco aoc -d " day-str " > " day-filename)))
+    (file->list day-filename)))
 
-(define (unpack-lists rest-id)
-  "Returns a cons of cars and a list of cdrs. If any list is empty, return nil."
+(define (unpack-lists lsts)
+  "Takes a list of lists and returns a list of their cars and a list of their cdrs.
+   If any list is empty, return nil."
   (define (aux lsts cars cdrs)
     (cond ((empty? lsts) (cons (reverse cars) (reverse cdrs)))
           ((empty? (car lsts)) '())
           (#t (aux (cdr lsts) (cons (caar lsts) cars) (cons (cdar lsts) cdrs)))))
-  (aux rest-id '() '()))
+  (aux lsts '() '()))
 
 (define (mapb proc . lsts)
   "Map proc over lsts, returning when any one of them runs out."
