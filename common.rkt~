@@ -1,6 +1,0 @@
-#lang racket
-
-(define (open-day n)
-  (open-input-file))
-
-(provide (all-defined-out))
