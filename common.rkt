@@ -14,11 +14,34 @@
       val))
 
 (define (mapcar f . xss)
-  "A mufch better mapcar stolen from muf"
+  "A mufch better mapcar stolen from Muf."
   (define (aux acc . xss)
     (if (ormap empty? xss)
         (reverse acc)
         (apply aux (cons (apply f (map car xss)) acc) (map cdr xss))))
   (apply aux '() xss))
+
+(define (pair-up lst n)
+  "Slices up a list into sublists length n. Excess elements ignored."
+  (define (aux lst acc)
+    (if (< (length lst) n)
+        (reverse acc)
+        (aux (drop lst n) (cons (take lst n) acc))))
+  (aux lst '()))
+
+;; Tuples are of form (x1 x2 . x3) etc. List with last el non-nil.
+
+(define (+. . tuples)
+  "Tuple addition."
+  (if (pair? (car tuples))
+      (cons (apply + (map car tuples))
+            (apply +. (map cdr tuples)))
+      (apply + tuples)))
+
+(define (mult2 tuple)
+  "Multiply first two elements of a tuple"
+  (if (pair? (cdr tuple))
+      (* (car tuple) (cadr tuple))
+      (* (car tuple) (cdr tuple))))
 
 (provide (all-defined-out))

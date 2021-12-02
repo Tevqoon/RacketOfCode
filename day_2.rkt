@@ -1,28 +1,22 @@
 #lang racket
 
 (require "common.rkt")
+(define input (pair-up (open-day 2) 2))
 
-(define input (open-day 2))
+(define (decoder1 pair acc)
+  (+. acc (match pair
+        [(list 'forward val) `(,val . 0)]
+        [(list 'down val)    `(0 . ,val)]
+        [(list 'up val)      `(0 . ,(- val))])))
 
-(define (solver1 input)
-  (define (aux lst x y)
-    (match lst
-      ['() (* x y)]
-      [(list _) (* x y)]
-      [(cons 'forward (cons val xss)) (aux xss (+ x val) y)]
-      [(cons 'down (cons val xss)) (aux xss x (+ y val))]
-      [(cons 'up (cons val xss)) (aux xss x (- y val))]))
-  (aux input 0 0))
+(define (decoder2 pair acc)
+  (+. acc (match pair
+        [(list 'forward val) `(,val ,(* val (cddr acc)) . 0)]
+        [(list 'down val)    `(0 0 . ,val)]
+        [(list 'up val)      `(0 0 . ,(- val))])))
 
-(submit 1 (solver1 input) #f)
+(define (solver decoder start)
+  (mult2 (foldl decoder start input)))
 
-(define (solver2 input)
-  (define (aux lst x y aim)
-    (match lst
-      ['() (* x y)]
-      [(cons 'down (cons val xss)) (aux xss x y (+ aim val))]
-      [(cons 'up (cons val xss)) (aux xss x y (- aim val))]
-      [(cons 'forward (cons val xss)) (aux xss (+ x val) (+ y (* val aim)) aim)]))
-  (aux input 0 0 0))
-
-(submit 2 (solver2 input) #f)
+(submit 1 (solver decoder1 '(0 . 0)) #f)
+(submit 2 (solver decoder2 '(0 0 . 0)) #f)
