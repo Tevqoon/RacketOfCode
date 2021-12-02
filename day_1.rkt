@@ -1,7 +1,7 @@
 #lang racket
 
 (require "common.rkt")
-
+ 
 (define input (open-day 1))
 
 (define (solver1 input)
@@ -13,4 +13,3 @@
   (solver1 (mapcar + input (cdr input) (cddr input))))
 
 (submit 2 (solver2 input))
- 

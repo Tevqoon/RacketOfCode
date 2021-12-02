@@ -14,6 +14,7 @@
       val))
 
 (define (mapcar f . xss)
+  "A mufch better mapcar stolen from muf"
   (define (aux acc . xss)
     (if (ormap empty? xss)
         (reverse acc)
