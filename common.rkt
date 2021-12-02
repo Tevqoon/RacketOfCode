@@ -21,6 +21,10 @@
         (apply aux (cons (apply f (map car xss)) acc) (map cdr xss))))
   (apply aux '() xss))
 
+(define (reduce f xs)
+  "Literally just reduce smfh."
+  (and (not (empty? xs)) (foldl f (first xs) (rest xs))))
+
 (define (pair-up lst n)
   "Slices up a list into sublists length n. Excess elements ignored."
   (define (aux lst acc)
@@ -32,9 +36,9 @@
 ;; Tuples are of form (x1 x2 . x3) etc. List with last el non-nil.
 
 (define (+. . tuples)
-  "Tuple addition."
+  "Tuple addition. Assumes at least one given element."
   (if (pair? (car tuples))
-      (cons (apply + (map car tuples))
+      (cons (apply +  (map car tuples))
             (apply +. (map cdr tuples)))
       (apply + tuples)))
 
