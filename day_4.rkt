@@ -1,7 +1,6 @@
 #lang racket
 
 (require "common.rkt")
-(require srfi/26) ; Cut macro for partial function application
 
 (define input (open-day 4 #t))
 

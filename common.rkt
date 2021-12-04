@@ -31,7 +31,9 @@
 
 (define (reduce f xs)
   "Literally just reduce smfh."
-  (and (not (empty? xs)) (foldl f (first xs) (rest xs))))
+  (if (empty? xs)
+      xs
+      (foldl f (first xs) (rest xs))))
 
 (define (slice-up lst n)
   "Slices up a list into sublists length n. Excess elements ignored."
@@ -76,7 +78,7 @@
   (apply map. / tuples))
 
 (define (mult2 tuple)
-  "Multiply first two elements of a tuple"
+  "Multiply first two elements of a tuple/list/whatever."
   (if (pair? (cdr tuple))
       (* (car tuple) (cadr tuple))
       (* (car tuple) (cdr tuple))))
@@ -99,5 +101,4 @@
 
 ;; Providing
 
-(provide (all-defined-out))
-
+(provide (all-defined-out) cut)
