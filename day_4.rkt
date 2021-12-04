@@ -8,7 +8,7 @@
 (define numbers (map string->number (string-split (car input) ",")))
 
 (define (board->ll board)
-  (map (λ (s) (map string->number (string-split s))) (cdr board)))
+  (map (λ(s) (map string->number (string-split s))) (cdr board)))
 
 (define boards (map board->ll (slice-up (cdr input) 6)))
 
@@ -22,20 +22,12 @@
         (* number (apply + (filter identity (flatten new-board))))
         new-board)))
 
-(define (stepper1 boards numbers)
+(define (stepper break? boards numbers)
   (for/fold ([boards boards]
              #:result (car (filter number? boards)))
             ([n (in-list numbers)])
-    #:break (ormap number? boards)
-    (map (cut update-board <> n) boards)))
-
-(submit 1 (stepper1 boards numbers) #f)
-
-(define (stepper2 boards numbers)
-  (for/fold ([boards boards]
-             #:result (car boards))
-            ([n (in-list numbers)])
-    #:break (and (number? (car boards)) (null? (cdr boards)))
+    #:break (break? boards)
     (map (cut update-board <> n) (filter-not number? boards))))
 
-(submit 2 (stepper2 boards numbers) #f)
+(submit 1 (stepper (cut ormap  number? <>) boards numbers) #f) ; Stop when there is one number
+(submit 2 (stepper (cut andmap number? <>) boards numbers) #f) ; Stop when there is only one number
