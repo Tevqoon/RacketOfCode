@@ -1,7 +1,7 @@
 #lang racket
 
 (require "common.rkt")
-(require srfi/26)
+(require srfi/26) ; cut macro
 
 (define input (map binstr->binlist (open-day 3 #t)))
 

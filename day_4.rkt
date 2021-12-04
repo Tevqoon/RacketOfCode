@@ -27,8 +27,7 @@
              #:result (car (filter number? boards)))
             ([n (in-list numbers)])
     #:break (ormap number? boards)
-    (map (cut update-board <> n) boards)
-    ))
+    (map (cut update-board <> n) boards)))
 
 (submit 1 (stepper1 boards numbers) #f)
 
@@ -36,10 +35,7 @@
   (for/fold ([boards boards]
              #:result (car boards))
             ([n (in-list numbers)])
-    #:break (number? (car boards))
-    (if (null? (cdr boards))
-        (map (cut update-board <> n) boards)
-        (filter-not number? (map (cut update-board <> n) boards)))
-    ))
+    #:break (and (number? (car boards)) (null? (cdr boards)))
+    (map (cut update-board <> n) (filter-not number? boards))))
 
 (submit 2 (stepper2 boards numbers) #f)

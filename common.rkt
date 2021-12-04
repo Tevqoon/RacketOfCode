@@ -44,6 +44,10 @@
 (define (pair-up lst)
   (slice-up lst 2))
 
+(define (transpose xss)
+  "Just transpose pepega."
+  (apply map list xss))
+
 ;; Tuples are of form (x1 x2 . x3).
 
 (define (map. proc . tuples)
@@ -76,13 +80,6 @@
   (if (pair? (cdr tuple))
       (* (car tuple) (cadr tuple))
       (* (car tuple) (cdr tuple))))
-
-(define (tapply procs . tuples)
-  "Applies procs to tuples componentwise. Assumes operations and tuples are all the same length"
-  (if (pair? procs)
-      (cons (apply (eval (car procs)) (map car tuples))
-            (tapply (cdr procs) (map cdr tuples)))
-      (apply (eval procs) (car tuples))))
 
 ;; Binary bullshit
 
