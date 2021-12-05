@@ -9,12 +9,9 @@
   (match line
     [(list x1 y1 _ x2 y2)
      (let* ([dx (- x2 x1)] [dy (- y2 y1)]
-            [step (cond
-                    [(= dx 0) (abs dy)]
-                    [(= dy 0) (abs dx)]
-                    [else (min (abs dx) (abs dy))])]
+            [step (gcd dx dy)]
             [sx (/ dx step)] [sy (/ dy step)])
-       (for/list ([i (inclusive-range 0 step)])
+       (for/list ([i (inclusive-range 0 step)])                  
          (cons (+ x1 (* i sx)) (+ y1 (* i sy)))))]))
        
 (define (solver lines)
