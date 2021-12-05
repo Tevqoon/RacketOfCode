@@ -3,7 +3,7 @@
 (require "common.rkt")
 
 (define input (slice-up (open-day 5) 5))
-; I manually changed the , to spaces to prevent unquoting, there must be a better way tho
+; I manually changed the , to spaces to prevent unquoting, there must be a better way tho.
 
 (define (line->points line)
   (match line
@@ -14,13 +14,13 @@
                     [(= dy 0) (abs dx)]
                     [else (min (abs dx) (abs dy))])]
             [sx (/ dx step)] [sy (/ dy step)])
-       (for/list ([i (range (+ 1 step))])
+       (for/list ([i (inclusive-range 0 step)])
          (cons (+ x1 (* i sx)) (+ y1 (* i sy)))))]))
        
 (define (solver lines)
   (let ([points (make-hash)])
     (for ([point (apply append (map line->points lines))])
-      (hash-set! points point (+ 1 (hash-ref points point 0))))
+      (hash-update! points point (cut + 1 <>) 0))
     (count (cut <= 2 <>) (hash-values points))))
 
 (define (horver? line)
@@ -28,4 +28,3 @@
 
 (submit 1 (solver (filter horver? input)) #f)
 (submit 2 (solver input) #f)
-
