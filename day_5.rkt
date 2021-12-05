@@ -1,0 +1,31 @@
+#lang racket
+
+(require "common.rkt")
+
+(define input (slice-up (open-day 5) 5))
+; I manually changed the , to spaces to prevent unquoting, there must be a better way tho
+
+(define (line->points line)
+  (match line
+    [(list x1 y1 _ x2 y2)
+     (let* ([dx (- x2 x1)] [dy (- y2 y1)]
+            [step (cond
+                    [(= dx 0) (abs dy)]
+                    [(= dy 0) (abs dx)]
+                    [else (min (abs dx) (abs dy))])]
+            [sx (/ dx step)] [sy (/ dy step)])
+       (for/list ([i (range (+ 1 step))])
+         (cons (+ x1 (* i sx)) (+ y1 (* i sy)))))]))
+       
+(define (solver lines)
+  (let ([points (make-hash)])
+    (for ([point (apply append (map line->points lines))])
+      (hash-set! points point (+ 1 (hash-ref points point 0))))
+    (count (cut <= 2 <>) (hash-values points))))
+
+(define (horver? line)
+  (match line [(list x1 y1 _ x2 y2) (or (= x1 x2) (= y1 y2))]))
+
+(submit 1 (solver (filter horver? input)) #f)
+(submit 2 (solver input) #f)
+
