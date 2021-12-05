@@ -3,7 +3,6 @@
 (require "common.rkt")
 
 (define input (slice-up (open-day 5) 5))
-; I manually changed the , to spaces to prevent unquoting, there must be a better way tho.
 
 (define (line->points line)
   (match line

@@ -4,6 +4,12 @@
 
 ;; Administration
 
+(define (remove-unquotes symb)
+  (if (or (number? symb)
+          (symbol? symb))
+      symb
+      (cadr symb)))
+
 (define (open-day n [lines? #f])
   "Opens the n-th day's input file as a list.
    If it doesn't exist, pull it with the aoc package."
@@ -12,7 +18,7 @@
       (system (format "raco aoc -d ~a > ~a" n day-filename)))
     (if lines?
         (file->lines day-filename)
-        (file->list day-filename))))
+        (map remove-unquotes (file->list day-filename)))))
 
 (define (submit n val [submit? #f])
   (if submit?
