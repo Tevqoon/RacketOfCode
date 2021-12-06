@@ -5,8 +5,7 @@
 ;; Administration
 
 (define (remove-unquotes symb)
-  (if (or (number? symb)
-          (symbol? symb))
+  (if (or (number? symb) (symbol? symb))
       symb
       (cadr symb)))
 
@@ -55,6 +54,8 @@
 (define (transpose xss)
   "Just transpose pepega."
   (apply map list xss))
+
+(define (zip l1 l2) (map cons l1 l2))
 
 ;; Tuples are of form (x1 x2 . x3).
 
