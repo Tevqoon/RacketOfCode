@@ -16,7 +16,7 @@
 (define (solver lines)
   (let ([points (make-hash)])
     (for ([point (apply append (map line->points lines))])
-      (hash-update! points point (cut + 1 <>) 0))
+      (hash-update! points point add1 0))
     (count (cut <= 2 <>) (hash-values points))))
 
 (define (horver? line)
@@ -24,4 +24,3 @@
 
 (submit 1 (solver (filter horver? input)) #f)
 (submit 2 (solver input) #f)
-

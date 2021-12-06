@@ -5,6 +5,7 @@
 ;; Administration
 
 (define (remove-unquotes symb)
+  "If stuff is separated by commas, remove them."
   (if (or (number? symb) (symbol? symb))
       symb
       (cadr symb)))
@@ -45,8 +46,9 @@
   (define (aux lst acc)
     (if (< (length lst) n)
         (reverse acc)
-        (aux (drop lst n) (cons (take lst n) acc))))
-  (aux lst '()))
+        (let-values ([(hd tl) (split-at lst n)])
+          (aux tl (cons hd acc)))))
+    (aux lst '()))
 
 (define (pair-up lst)
   (slice-up lst 2))
@@ -55,7 +57,9 @@
   "Just transpose pepega."
   (apply map list xss))
 
-(define (zip l1 l2) (map cons l1 l2))
+(define (zip . lists)
+  "Huh i guess zipping is basically transposing"
+  (apply mapcar list lists))
 
 ;; Tuples are of form (x1 x2 . x3).
 

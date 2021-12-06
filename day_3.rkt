@@ -18,7 +18,7 @@
         (car input)
         (let* ([freq (apply + (map (cut list-ref <> n) input))]
                [bit  (if (comparator freq (/ (length input) 2)) 1 0)])
-          (aux (filter (λ (x) (equal? (list-ref x n) bit)) input) (+ n 1)))))
+          (aux (filter (λ (x) (equal? (list-ref x n) bit)) input) (add1 n)))))
   (binlist->integer (aux input 0)))
 
 (submit 2 (* (solver2 < input) (solver2 >= input)) #f)
