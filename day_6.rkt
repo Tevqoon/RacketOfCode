@@ -17,6 +17,6 @@
     (let-values ([(hd tl) (split-at fish 6)])
       (aux hd tl days)))
 
-
 (submit 1 (stepper input 80) #f)
 (submit 2 (stepper input 256) #f)
+

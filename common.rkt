@@ -35,12 +35,6 @@
         (apply aux (cons (apply f (map car xss)) acc) (map cdr xss))))
   (apply aux '() xss))
 
-(define (reduce f xs)
-  "Literally just reduce smfh."
-  (if (empty? xs)
-      xs
-      (foldl f (first xs) (rest xs))))
-
 (define (slice-up lst n)
   "Slices up a list into sublists length n. Excess elements ignored."
   (define (aux lst acc)

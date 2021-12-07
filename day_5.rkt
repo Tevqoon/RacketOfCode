@@ -12,7 +12,7 @@
             [sx (/ dx step)] [sy (/ dy step)])
        (for/list ([i (inclusive-range 0 step)])                  
          (cons (+ x1 (* i sx)) (+ y1 (* i sy)))))]))
-       
+
 (define (solver lines)
   (let ([points (make-hash)])
     (for ([point (apply append (map line->points lines))])
