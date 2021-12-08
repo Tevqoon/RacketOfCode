@@ -88,7 +88,7 @@
       (* (car tuple) (cadr tuple))
       (* (car tuple) (cdr tuple))))
 
-;; Binary bullshit
+;; Number
 
 (define (binstr->binlist binstr)
   (map (cut - <> 48)
@@ -103,6 +103,13 @@
 
 (define (binlist->integer binlist)
   (binstr->integer (binlist->binstr binlist)))
+
+(define (digits->number digits)
+  (define (aux acc lst ex)
+    (if (empty? lst)
+        acc
+        (aux (+ acc (* (car lst) (expt 10 ex))) (cdr lst) (add1 ex))))
+  (aux 0 (reverse digits) 0))
 
 ;; Providing
 
