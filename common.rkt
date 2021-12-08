@@ -25,7 +25,7 @@
       (system (format "raco aoc -a ~a ~a" n val))
       val))
 
-;; Mapping
+;; Mapping and listshit
 
 (define (mapcar f . xss)
   "A mufch better mapcar stolen from Muf."
@@ -54,6 +54,26 @@
 (define (zip . lists)
   "Huh i guess zipping is basically transposing"
   (apply mapcar list lists))
+
+(define (length? y)
+  (λ(x) (= y (length x))))
+
+(define (pop lst . prds)
+  "Returns the first element to satisfy all prds and the rest of the list.
+   Assumes a match will be found."
+  (define (aux lst acc)
+    (match lst
+      [(cons x xs)
+       (if (andmap (λ(p) (p x)) prds)
+           (values x (append (reverse acc) xs))
+           (aux xs (cons x acc)))]
+      [(list x) (values x '())]))
+  (aux lst '()))
+
+;; Vector barf
+
+(define (vector-memf prd vec)
+  (vector-member #t (vector-map prd vec)))
 
 ;; Tuples are of form (x1 x2 . x3).
 
