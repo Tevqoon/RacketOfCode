@@ -8,27 +8,23 @@
 (define (lrr l x)
   (list-ref (list-ref l (car x)) (cdr x)))
 
-(define (is? prd el . rst)
+(define (is? prd el rst)
   (andmap (λ(x) (prd el x)) rst))
 
 (define (low-points input)
-  (let ([x0 (length input)]
-        [y0 (length (car input))]
-        [padded (pad input +inf.0)])
-    (apply append
-           (for/list ([x (range 1 (add1 x0))])
-             (for/list ([y (range 1 (add1 y0))]
-                        #:when (apply is? < (lrr padded (cons x y))
-                                       (map (λ(d) (lrr padded (+. (cons x y) d))) directions)))
-               (cons (sub1 x) (sub1 y)))))))
-
-(define (solver1 input)
-  (apply + (map (λ(c) (add1 (lrr input c))) (low-points input))))
+  (let ([padded (pad input +inf.0)])
+    (apply
+     append
+     (for/list ([x (range 1 (add1 (length input)))])
+       (for/list ([y (range 1 (add1 (length (car input))))]
+                  #:when (is? < (lrr padded (cons x y))
+                              (map (λ(d) (lrr padded (+. (cons x y) d))) directions)))
+         (cons (sub1 x) (sub1 y)))))))
 
 (define (get-basin-size input low-point)
   (define (neighbors point)
-    (filter (λ(x) (and (andmap. < x (cons (length input) (length (car input))))
-                       (andmap. <= '(0 . 0) x)))
+    (filter (λ(x) (and (<. x (cons (length input) (length (car input))))
+                       (>. x '(0 . 0))))
             (map (cut +. point <>) directions)))
   (define (aux size seen to-look)
     (match to-look
@@ -38,11 +34,13 @@
            (aux (add1 size)
                 (cons x seen)
                 (append xs (filter (λ(y) (and (not (= (lrr input y) 9))
-                                              (andmap. < (lrr input x)
-                                                         (lrr input y))))
+                                              (<. (lrr input x) (lrr input y))))
                                    (neighbors x)))))]
       [empty size]))
   (aux 0 '() (list low-point)))
+
+(define (solver1 input)
+  (apply + (map (λ(c) (add1 (lrr input c))) (low-points input))))
 
 (define (solver2 input)
   (apply * (take (sort (map (cut get-basin-size input <>) (low-points input)) >=) 3)))

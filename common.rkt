@@ -114,6 +114,12 @@
 (define (/. . tuples)
   (apply map. / tuples))
 
+(define (<. . tuples)
+  (apply andmap. < tuples))
+
+(define (>. . tuples)
+  (apply andmap. > tuples))
+
 (define (mult2 tuple)
   "Multiply first two elements of a tuple/list/whatever."
   (if (pair? (cdr tuple))
