@@ -20,13 +20,13 @@
 (define (get-basin-size input low-point)
   (define (neighbors point)
     (filter (cut andmap < '(0 0) <> `(,x0 ,y0))
-            (map (curry +. point) directions)))
+            (map (cut +. point <>) directions)))
   (define (aux size seen to-look)
     (match to-look
       [(cons x xs) #:when (set-member? seen x) (aux size seen xs)]
       [(cons x xs)
        (aux (add1 size)
-            (set-add x seen)
+            (set-add seen x)
             (append xs (filter (λ(y) (< (lrr input x) (lrr input y) 9))
                                (neighbors x))))]
       [empty size]))
