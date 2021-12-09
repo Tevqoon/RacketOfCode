@@ -68,6 +68,7 @@
   (aux lst '()))
 
 (define (pad l* padsymb)
+  "Encloses a list of lists l* with padsymb"
   (let ([l (+ 2 (length (car l*)))])
     (append (list (build-list l (const padsymb)))
             (map (λ(x) (append (list padsymb) x (list padsymb))) l*)
@@ -91,15 +92,6 @@
           [else (apply proc tuples)]))
   (aux tuples))
 
-(define (andmap. prd . tuples)
-  (let ([vals (apply map. prd tuples)])
-    (define (aux rst)
-      (match rst
-        [(cons x xs) #:when (list? xs) (and x (aux xs))]
-        [(cons x y) (and x y)]
-        [x x]))
-    (aux vals)))
-
 ;; Some basic tuple operations
 
 (define (+. . tuples)
@@ -114,17 +106,11 @@
 (define (/. . tuples)
   (apply map. / tuples))
 
-(define (<. . tuples)
-  (apply andmap. < tuples))
-
-(define (>. . tuples)
-  (apply andmap. > tuples))
-
 (define (mult2 tuple)
   "Multiply first two elements of a tuple/list/whatever."
   (if (pair? (cdr tuple))
       (* (car tuple) (cadr tuple))
-      (* (car tuple) (cdr tuple))))
+      (* (car tuple) (cdr  tuple))))
 
 ;; Number
 
