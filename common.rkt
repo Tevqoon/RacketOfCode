@@ -55,9 +55,6 @@
   "Huh i guess zipping is basically transposing"
   (apply mapcar list lists))
 
-(define (length? y)
-  (λ(x) (= y (length x))))
-
 (define (pop lst . prds)
   "Returns the first element to satisfy all prds and the rest of the list.
    Assumes a match will be found."
@@ -69,6 +66,12 @@
            (aux xs (cons x acc)))]
       [(list x) (values x '())]))
   (aux lst '()))
+
+(define (pad l* padsymb)
+  (let ([l (+ 2 (length (car l*)))])
+    (append (list (build-list l (const padsymb)))
+            (map (λ(x) (append (list padsymb) x (list padsymb))) l*)
+            (list (build-list l (const padsymb))))))
 
 ;; Vector barf
 
@@ -87,6 +90,15 @@
           [(null? (car tuples)) null]
           [else (apply proc tuples)]))
   (aux tuples))
+
+(define (andmap. prd . tuples)
+  (let ([vals (apply map. prd tuples)])
+    (define (aux rst)
+      (match rst
+        [(cons x xs) #:when (list? xs) (and x (aux xs))]
+        [(cons x y) (and x y)]
+        [x x]))
+    (aux vals)))
 
 ;; Some basic tuple operations
 
@@ -130,6 +142,12 @@
         acc
         (aux (+ acc (* (car lst) (expt 10 ex))) (cdr lst) (add1 ex))))
   (aux 0 (reverse digits) 0))
+
+(define (number->list num)
+  (map (lambda (c) (- (char->integer c) (char->integer #\0)))
+       (string->list
+        (number->string num))))
+
 
 ;; Providing
 
