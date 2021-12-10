@@ -140,7 +140,6 @@
        (string->list
         (number->string num))))
 
-
 ;; Providing
 
 (provide (all-defined-out) cut)

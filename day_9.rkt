@@ -13,14 +13,14 @@
 (define (low-points input)
   (let ([padded (pad input +inf.0)])
     (for/list ([x (cartesian-product (inclusive-range 1 x0) (inclusive-range 1 y0))]
-               #:when (andmap (λ(d) (< (lrr padded x) (lrr padded (+. x d))))
+               #:when (andmap (λ(d) (< (lrr padded x) (lrr padded (map + x d))))
                               directions))
-      (-. x '(1 1)))))
+      (map - x '(1 1)))))
 
 (define (get-basin-size input low-point)
   (define (neighbors point)
     (filter (cut andmap < '(0 0) <> `(,x0 ,y0))
-            (map (cut +. point <>) directions)))
+            (map (curry map + point) directions)))
   (define (aux size seen to-look)
     (match to-look
       [(cons x xs) #:when (set-member? seen x) (aux size seen xs)]
