@@ -75,9 +75,11 @@
             (list (build-list l (const padsymb))))))
 
 (define (lrr l x)
+  "Get element of l at indices x."
   (list-ref (list-ref l (car x)) (cadr x)))
 
 (define (lrrp l x y)
+  "Changes element of l at index x with y, very inefficient."
   (for/list ([i (range (length l))])
     (for/list ([j (range (length (car l)))])
       (if (and (= i (car x)) (= j (cadr x)))
