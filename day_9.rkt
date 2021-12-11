@@ -7,9 +7,6 @@
 (define y0 (length (car input)))
 (define directions '((1 0) (-1 0) (0 1) (0 -1)))
 
-(define (lrr l x)
-  (list-ref (list-ref l (car x)) (cadr x)))
-
 (define (low-points input)
   (let ([padded (pad input +inf.0)])
     (for/list ([x (cartesian-product (inclusive-range 1 x0) (inclusive-range 1 y0))]
@@ -18,9 +15,6 @@
       (map - x '(1 1)))))
 
 (define (get-basin-size input low-point)
-  (define (neighbors point)
-    (filter (cut andmap < '(0 0) <> `(,x0 ,y0))
-            (map (curry map + point) directions)))
   (define (aux size seen to-look)
     (match to-look
       [(cons x xs) #:when (set-member? seen x) (aux size seen xs)]
@@ -28,7 +22,7 @@
        (aux (add1 size)
             (set-add seen x)
             (append xs (filter (λ(y) (< (lrr input x) (lrr input y) 9))
-                               (neighbors x))))]
+                               (neighbors x directions x0 y0))))]
       [empty size]))
   (aux 0 (set) (list low-point)))
 

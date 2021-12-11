@@ -74,6 +74,25 @@
             (map (λ(x) (append (list padsymb) x (list padsymb))) l*)
             (list (build-list l (const padsymb))))))
 
+(define (lrr l x)
+  (list-ref (list-ref l (car x)) (cadr x)))
+
+(define (lrrp l x y)
+  (for/list ([i (range (length l))])
+    (for/list ([j (range (length (car l)))])
+      (if (and (= i (car x)) (= j (cadr x)))
+          y
+          (lrr l (list i j))))))
+
+(define (neighbors point directions x0 y0)
+  (filter (cut andmap < '(-1 -1) <> `(,x0 ,y0))
+          (map (curry map + point) directions)))
+
+(define (repeater f x n)
+  (if (zero? n)
+      x
+      (repeater f (f x) (sub1 n))))
+
 ;; Vector barf
 
 (define (vector-memf prd vec)
