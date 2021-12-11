@@ -57,15 +57,16 @@
 
 (define (pop lst . prds)
   "Returns the first element to satisfy all prds and the rest of the list.
-   Assumes a match will be found."
+   Returns null instead of a value if no matches found."
   (define (aux lst acc)
     (match lst
+      [(list x) #:when (andmap (λ(p) (p x)) prds) (values x '())]
+      [(list x) (values '() lst)]
       [(cons x xs)
        (if (andmap (λ(p) (p x)) prds)
            (values x (append (reverse acc) xs))
-           (aux xs (cons x acc)))]
-      [(list x) (values x '())]))
-  (aux lst '()))
+           (aux xs (cons x acc)))]))
+      (aux lst '()))
 
 (define (pad l* padsymb)
   "Encloses a list of lists l* with padsymb"
@@ -136,12 +137,12 @@
 ;; Number
 
 (define (binstr->binlist binstr)
-  (map (cut - <> 48)
+  (map (cut - <> (char->integer #\0))
        (map char->integer (string->list binstr))))
 
 (define (binlist->binstr binlist)
   (list->string (map integer->char
-                     (map (cut + <> 48) binlist))))
+                     (map (cut + <> (char->integer #\0)) binlist))))
 
 (define (binstr->integer binstr)
   (string->number (format "#b~a" binstr)))
@@ -157,9 +158,8 @@
   (aux 0 (reverse digits) 0))
 
 (define (number->list num)
-  (map (lambda (c) (- (char->integer c) (char->integer #\0)))
-       (string->list
-        (number->string num))))
+  (map (λ(c) (- (char->integer c) (char->integer #\0)))
+       (string->list (number->string num))))
 
 ;; Providing
 
