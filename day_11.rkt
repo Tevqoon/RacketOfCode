@@ -30,10 +30,9 @@
 
 (define (solver2 input x0 y0)
   (define (aux board n)
-    (let ([new-board (step board x0 y0)])
-      (if (zero? (apply + (flatten new-board)))
-          (add1 n)
-          (aux new-board (add1 n)))))
+    (if (empty? (filter-not zero? (flatten board)))
+        n
+        (aux (step board x0 y0) (add1 n))))
   (aux input 0))
 
 (submit 1 (solver1 input 100 x0 y0) #f)
