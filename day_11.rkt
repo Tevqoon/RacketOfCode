@@ -5,7 +5,7 @@
 (define input (map binstr->binlist (open-day 11 #t)))
 (define x0 (length input))
 (define y0 (length (car input)))
-(define directions '((-1 -1) (-1 0) (-1 1) (0 -1) (0 1) (1 -1) (1 0) (1 1)))
+(define directions (cartesian-product '(-1 0 1) '(-1 0 1)))
 
 (define (step input)
   (define (aux board to-flash)
