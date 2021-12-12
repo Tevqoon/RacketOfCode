@@ -1,7 +1,6 @@
 #lang racket
 
 (require "common.rkt")
-(require memoize)
 
 (define (collect pairs)
   (let ([rethash (make-hash)])
@@ -16,37 +15,35 @@
 (define input (collect (map (cut string-split <> "-") (open-day 12 #t))))
 
 (define (explore1 caves)
-  (define/memo (aux acc ongoing)
-    "Accumulator has completed paths."
+  (define (aux acc ongoing)
     (match ongoing
       [(cons x xs) #:when (equal? (car x) "end")
-                   (aux (cons (reverse x) acc) xs)]
+                   (aux (add1 acc) xs)]
       [(cons x xs) (aux acc
                         (append (map (cut cons <> x)
                                      (set-subtract (hash-ref caves (car x))
-                                                   (filter downcase? (cdr x))))
+                                                   (filter downcase? x)))
                                 xs))]
       [empty acc]))
-  (aux '() '(("start"))))
+  (aux 0 '(("start"))))
 
 (define (explore2 caves)
-  (define/memo (aux acc ongoing)
-    "Accumulator has completed paths."
+  (define (aux acc ongoing)
     (match ongoing
       [(cons x xs) #:when (equal? (car x) "end")
-                   (aux (cons (reverse x) acc) xs)]
+                   (aux (add1 acc) xs)]
       [(cons x xs) (aux acc
                         (append (map (cut cons <> x)
                                      (if (check-duplicates (filter downcase? x))
                                          ;if there's already two small caves, filter them aggressively
                                          (set-subtract (hash-ref caves (car x))
-                                                       (filter downcase? (cdr x)))
+                                                       (filter downcase? x))
                                          ;othwerise just take all small caves as options except "start"
                                          (set-subtract (hash-ref caves (car x))
                                                        (list "start"))))
                                 xs))]
       [empty acc]))
-  (aux '() '(("start"))))
+  (aux 0 '(("start"))))
 
-(submit 1 (length (explore1 input)) #f)
-(submit 2 (length (explore2 input)) #f)
+(submit 1 (explore1 input) #f)
+(submit 2 (explore2 input) #f)
