@@ -12,7 +12,7 @@
 (define (downcase? str)
   (equal? (string-downcase str) str))
 
-(define input (collect (map (cut string-split <> "-") (open-day 12 #t))))
+(define input (collect (map (curryr string-split "-") (open-day 12 #t))))
 
 (define (explore caves disallow-duplicate?)
   (define (aux acc ongoing)
@@ -21,7 +21,7 @@
                    (aux (add1 acc) xs)]
       [(cons x xs)
        (aux acc
-            (append (map (cut cons <> x)
+            (append (map (curryr cons x)
                          (if (or disallow-duplicate? ; If duplicates aren't allowed, just don't care
                                  (check-duplicates (filter downcase? x)))
                              ;if there's already two small caves, filter them aggressively
