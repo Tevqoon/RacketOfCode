@@ -5,7 +5,7 @@
 (define-values (numbers folds)
   (let*-values ([(numbers folds) (splitf-at (open-day 13) number?)])
     (values (let*-values ([(numbers) (list->set (pair-up numbers))]
-                         [(x0 y0) (apply values (map (λ(x) (+ 1 x (modulo x 2))) (apply map max (set->list numbers))))])
+                          [(x0 y0) (apply values (map (λ(x) (+ 1 x (modulo x 2))) (apply map max (set->list numbers))))])
               (build-list y0 (λ(y) (build-list x0 (λ(x) (set-member? numbers (list x y)))))))  
             (map (λ(x) (list (match (car x) ["x" #t] ["y" #f]) (string->number (cadr x))))
                  (map (compose (curryr string-split "=") symbol->string)
