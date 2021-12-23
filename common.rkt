@@ -161,6 +161,20 @@
   (map (λ(c) (- (char->integer c) (char->integer #\0)))
        (string->list (number->string num))))
 
+(define (hexnum->binlist hexnum)
+  "Turns a hex decimal number into a list of its four bits"
+  (define (aux acc num)
+    (if (zero? num)
+        acc
+        (aux (cons (modulo num 2) acc)
+             (quotient num 2))))
+  (append (make-list (if (zero? hexnum)
+                         4
+                         (- 3 (inexact->exact (floor (log hexnum 2)))))
+                     0)
+          (aux '() hexnum)))
+
+
 ;; Providing
 
 (provide (all-defined-out) cut)
