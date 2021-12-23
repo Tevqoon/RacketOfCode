@@ -36,10 +36,10 @@
 (define (process-packet bits)
   (let*-values ([(vrsn tail) (split-at bits 3)]
                 [(type tail) (split-at tail 3)]
-                [(vrsn type) (values (binlist->integer vrsn) (binlist->integer type))] )
+                [(vrsn type) (values (binlist->integer vrsn) (binlist->integer type))])
+    (set! total-version (+ vrsn total-version))
     (match type
       [4 (let-values ([(val tail n) (process-value tail)])
-           (set! total-version (+ vrsn total-version))
            (values val tail n))]
       [op #:when (= 0 (first tail))
           (let*-values ([(total-length tail) (split-at (rest tail) 15)]
@@ -50,7 +50,6 @@
                   (let-values ([(val tail m) (process-packet lst)])
                     (aux (cons val acc) tail (+ n m)))))
             (let-values ([(vals tail) (aux '() tail 0)])
-              (set! total-version (+ vrsn total-version))
               (values (cons (op->fun op) vals) tail (+ 7 15 total-length))))]
       [op #:when (= 1 (first tail))
           (let*-values ([(num-packets tail) (split-at (rest tail) 11)]
@@ -61,7 +60,6 @@
                   (let-values ([(val tail m) (process-packet lst)])
                     (aux (cons val acc) tail (+ m n) (add1 num)))))
             (let-values ([(vals tail n) (aux '() tail 0 0)])
-              (set! total-version (+ vrsn total-version))
               (values (cons (op->fun op) vals) tail (+ 7 11 n))))])))
 
 (let-values ([(val tail n) (process-packet input)])
