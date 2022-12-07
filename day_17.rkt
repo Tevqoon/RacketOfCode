@@ -25,9 +25,8 @@
                   (aux (max acc (cadr new-point)) new-point new-velocity))]))
   (aux (- (expt 10 10)) '(0 0) starting-velocity))
 
-(define height-starting (filter identity
-                                (map (curryr stepchecker input)
-                                     (cartesian-product (range 1 200) (range -200 200)))))
+(define height-starting (filter-map (curryr stepchecker input) (cartesian-product (range 1 200) (range -200 200))))
 
 (submit 1 (apply max height-starting))
-(length height-starting)
+(submit 2 (length height-starting))
+
